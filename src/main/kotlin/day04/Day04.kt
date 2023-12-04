@@ -35,11 +35,8 @@ fun main() {
     println(part2)
 }
 
-
 fun processCard(gameId: Int, games: Map<Int, Int>): Int {
-    if (games[gameId] == 0) {
-        return 1
-    }
+    if (games[gameId] == 0) return 1
 
     return 1 + (gameId + 1 .. gameId + games.getValue(gameId)).fold(0) { acc, next ->
         if (CACHE.containsKey(next)) {

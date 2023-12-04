@@ -3,7 +3,6 @@ package day02
 import utils.readInput
 import kotlin.math.max
 
-
 class Game(val id: Int, private val rounds: List<Map<String, Int>>) {
     fun isPossible(available: Map<String, Int>): Boolean {
         return rounds.all { round ->
@@ -13,7 +12,7 @@ class Game(val id: Int, private val rounds: List<Map<String, Int>>) {
         }
     }
 
-    fun minRequirement(): Map<String, Int> {
+    private fun minRequirement(): Map<String, Int> {
         val result = mutableMapOf(
             "red" to 0,
             "green" to 0,

@@ -5,23 +5,22 @@ import utils.readInput
 import kotlin.math.max
 import kotlin.math.min
 
+val POTENTIAL_GEARS = HashMap<Vec2, ArrayList<Int>>()
+val INPUT = readInput("day03/input")
+
 fun main() {
-    val input = readInput("day03/input")
-
-    var part1 = 0
-
-    val potentialGears = HashMap<Vec2, ArrayList<Int>>()
-
     // Find potential gears
-    input.forEachIndexed { y, line ->
+    INPUT.forEachIndexed { y, line ->
         line.forEachIndexed { x, c ->
             if (c == '*') {
-                potentialGears[Vec2(x, y)] = ArrayList()
+                POTENTIAL_GEARS[Vec2(x, y)] = ArrayList()
             }
         }
     }
 
-    input.forEachIndexed { i, line ->
+    var part1 = 0
+
+    INPUT.forEachIndexed { i, line ->
         var j = 0
 
         while (j < line.length) {
@@ -33,11 +32,10 @@ fun main() {
 
                 val number = line.slice((j until (j + len))).toInt()
 
-                val yRange = (max(i - 1, 0) .. min(i + 1, input.size - 1))
+                val yRange = (max(i - 1, 0) .. min(i + 1, INPUT.size - 1))
                 val xRange = (max(j - 1, 0) until min(j + len + 1, line.length))
 
-
-                if (isValid(yRange, xRange, input, number, potentialGears)) {
+                if (isValid(yRange, xRange, number)) {
                     part1 += number
                 }
 
@@ -50,26 +48,22 @@ fun main() {
 
     println(part1)
 
-    val foo = potentialGears.values.filter { it.size == 2 }.map { it.reduce { acc, next -> acc * next } }.sum()
-    println(foo)
+    val part2 = POTENTIAL_GEARS.values.filter { it.size == 2 }.sumOf { it.reduce { acc, next -> acc * next } }
+    println(part2)
 }
-
-
 
 private fun isValid(
     yRange: IntRange,
     xRange: IntRange,
-    input: List<String>,
     number: Int,
-    potentialGears: HashMap<Vec2, ArrayList<Int>>
 ): Boolean {
     for (y in yRange) {
         for (x in xRange) {
-            if (input[y][x] == '*') {
-                potentialGears.getValue(Vec2(x, y)).add(number)
+            if (INPUT[y][x] == '*') {
+                POTENTIAL_GEARS.getValue(Vec2(x, y)).add(number)
             }
 
-            if (!input[y][x].isDigit() && input[y][x] != '.') {
+            if (!INPUT[y][x].isDigit() && INPUT[y][x] != '.') {
                 return true
             }
         }
