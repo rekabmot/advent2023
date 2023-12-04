@@ -1,14 +1,12 @@
 package day01
 
 import utils.readInput
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
 
-val NUMBERS = "(one|two|three|four|five|six|seven|eight|nine|[0-9])"
+const val NUMBERS = "(one|two|three|four|five|six|seven|eight|nine|[0-9])"
 val FIRST = NUMBERS.toRegex()
 val LAST = ".*$NUMBERS".toRegex()
 
-fun stringToDigit(value: String) = when(value) {
+fun stringToDigit(value: String) = when (value) {
     "one" -> "1"
     "two" -> "2"
     "three" -> "3"
@@ -21,23 +19,18 @@ fun stringToDigit(value: String) = when(value) {
     else -> value
 }
 
-@OptIn(ExperimentalTime::class)
 fun main() {
-    val duration = measureTime {
-        val input = readInput("day01/input")
+    val input = readInput("day01/input")
 
-        val part1 =
-            input.sumOf { x -> (x.first { it.isDigit() }.toString() + x.last { it.isDigit() }.toString()).toInt() }
-        println(part1)
+    val part1 = input.sumOf { x -> (x.first { it.isDigit() }.toString() + x.last { it.isDigit() }.toString()).toInt() }
 
-        val part2 = input.sumOf {
-            val first = stringToDigit(FIRST.find(it)?.value!!)
-            val last = stringToDigit(LAST.find(it)?.groupValues?.last()!!)
-            (first + last).toInt()
-        }
+    println(part1)
 
-        println(part2)
+    val part2 = input.sumOf {
+        val first = stringToDigit(FIRST.findAll(it).first().value)
+        val last = stringToDigit(LAST.find(it)?.groupValues!![1])
+        (first + last).toInt()
     }
 
-    println(duration.inWholeMilliseconds)
+    println(part2)
 }
